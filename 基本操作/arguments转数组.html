@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            函数的arguments是一个类数组对象：
+                1.arguments对象的键值对的键为0，1，2...
+                2.arguments对象有length属性
+            函数体内执行Array.prototype.slice.call(arguments)可以获取arguments的数组形式
+            原理：
+                Array.prototype.slice的源码大致实现：
+                function slice(start, end) {
+                    var len = f(this.length); //通过length属性获取调用slice方法的变量的长度，这里说明只要有length属性即可，而不强制要求对象或者数组
+                    ...  //结合len和传入的start、end经过一些逻辑计算，最终确定要截取的开始位置start_和结束位置end_,slice不传参数时，start_=0、end_=this.length
+                    var result = [];
+                    for(let i = start_; i < end_; i ++) {
+                        result.push(this[i]);  //arguments对象的键为0、1、2...，所以正好这里通过this[i]可以依次访问到arguments的所有属性
+                    }
+                    return result;
+                }
+        */
+        (function(a, b, c) {
+            console.log(Array.prototype.slice.call(arguments));
+        })("h", "c", "d"); //输出["h", "c", "d"]
+    </script>
+</body>
+</html>

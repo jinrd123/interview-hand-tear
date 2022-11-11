@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+            curring函数的结构：
+                (1).首先声明一个args数组，用来持续化存储每次调用传入的参数（做一个累计变量）
+                (2).声明一个循环函数，这个函数写清楚两点：
+                    1.if...什么时候执行curring函数传入的回调函数，也就是利用累计后的args数组
+                    2.else...什么时候操作args数组，保存本次传入的参数
+                (3).返回循环函数
+                plus：循环函数和args数组其实形成了闭包，循环函数一直可以访问args
+            curring函数逻辑:
+                第一次调用先传入一个函数cb，这样就完成了延迟函数的构造，用con去接收这个延迟函数，第一次调用返回的其实就是内部的circle函数了，往后再调用其实一直都返回的是circle函数，con的每次执行其实得到的都是那同一个circle函数，改变的是curring函数闭包中的args数组
+                直到某次con的调用（circle函数的调用）触发了cb的调用，cb使用前面累积的args数组，达到一种延迟执行的效果。
+        */
+        function curring(cb) {
+            var args = [];
+            function circle() {
+                if (arguments.length === 0) {
+                    return cb.apply(null, args)
+                } else {
+                    args = args.concat(Array.prototype.slice.call(arguments)); // 这里涉及 ../基本操作/arguments转数组.html 相关知识
+                }
+            }
+            return circle;
+        }
+        function cc() {
+            var arr = Array.prototype.slice.call(arguments);
+            console.log(arr);
+        }
+        var con = curring(cc);
+        con(12)
+        con(13, 14)
+        con(); //[ 12, 13, 14 ]
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 常规实现
+        function spliceUrl(protocol, hostname, patchname) {
+            return `${protocol}${hostname}${patchname}`;
+        }
+        const url1 = spliceUrl('https://', 'juejin.cn', '/post/6978685539985653767/');
+        const url2 = spliceUrl('https://', 'juejin.cn', '/post/6989751020255445005');
+        // currying写法
+        function spliceUrl_(protocol, hostname) {
+            return function (patchname) {
+                return `${protocol}${hostname}${patchname}`;
+            }
+        }
+        const urlBase = spliceUrl_('https://', 'juejin.cn');
+        const url1_ = urlBase('/post/6978685539985653767/')
+        const url2_ = urlBase('/post/6989751020255445005');
+        /*
+            通过一个柯里化函数spliceUrl_构造了一个新方法，构造时便指定原参数的前两个参数，这个新方法只接收原参数的最后一个。
+        */
+        /*
+            例2:获取nameList1中职业为中单的英雄名(mid部分)；获取nameList2中职业为上单的英雄名(up部分)
+        */
+        const nameList1 = [
+            { mid: '凯', profession: '中单' },
+            { mid: '夹子', profession: '中单' },
+            { mid: '狄仁杰', profession: '中单' },
+            { mid: '姚', profession: '中单' },
+        ];
+        const nameList2 = [
+            { up: '花木兰', profession: '上单' },
+            { up: '雷震子', profession: '上单' },
+            { up: '达摩', profession: '上单' },
+        ]
+        //常规实现
+        let midArr = nameList1.map((value) => {
+            if(value['mid']) return true;
+        })
+        let upArr = nameList2.map((value) => {
+            if(value['up']) return true;
+        })
+        //curring写法
+        const curring = name => element => element[name];
+        const mid_curring = curring('mid');
+        const up_curring = curring('up');
+        let midArr_ = nameList1.map( mid_curring );
+        let upArr_ = nameList2.map( up_curring );
+        console.log(upArr_) // ['花木兰', '雷震子', '达摩']
+    </script>
+</body>
+
+</html>
