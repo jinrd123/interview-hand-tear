@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>浮动实现三栏布局</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .left {
+            float: left;
+            width: 300px;
+            height: 100px;
+            background: #631D9F;
+        }
+
+        .right {
+            float: right;
+            width: 300px;
+            height: 100px;
+            background: red;
+        }
+
+        .center {
+            margin-left: 300px;
+            margin-right: 300px;
+            background-color: #4990E2;
+        }
+
+        .main::after {
+            /*
+                内容设置为空
+            */
+            content: '';
+            /*
+                display: block即让伪元素独占一行
+            */
+            display: block;
+            /*
+                ::after相当于是在父容器最后添加的一个非浮动流元素，设置clear: both即表示不占用浮动元素空出来的位置
+            */
+            clear: both;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <div class="left">左</div>
+        <div class="right">右</div>
+        <div class="center">中
+            <h2>浮动实现三栏布局的核心逻辑：一个父盒子，里面三个子盒子，左右盒子对应左浮动和右浮动，为了防止中间部分的内容过多，致使中间部分的高度高于左右盒子之后中间部分的文字环绕在左盒子的周围，即本应在中间部分的文字去了左盒子的下方，所以中间盒子需要设置左右margin等于左右盒子的宽度</h2>
+            <h2>最后一步，为了父盒子高度正常，即中间盒子的高度没有左右盒子高度高时，父盒子的高度应该与左右盒子一样，而不是由中间盒子的内容撑开，所以需要清除浮动，这里使用伪元素清除浮动</h2>
+        </div>
+    </div>
+</body>
+
+</html>
