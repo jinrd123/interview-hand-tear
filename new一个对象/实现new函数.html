@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const _new = function(constructor, ...args) {//简单说一下...拓展运算符，就是把一层的数组或者对象“脱去”[]或者{};函数形参写...args相当于这个函数在调用的时候传入的是参数列表，然后函数体中实现逻辑的时候拿到的是args数组
+            /*
+                说白了new运算符的核心就是拿着一个构造函数，和一些参数来创建一个对象的过程
+                    1. 创建空对象
+                    2. 给创建的对象添加__proto__属性
+                    3. 执行构造函数的函数体（需要让我们创建的对象去执行，并传入参数）
+                    4. 判断构造函数是否显式返回了对象，如果没有就返回我们创建的对象
+            */
+            const obj = {};
+            obj.__proto__ = constructor.prototype;
+            const res = constructor.apply(obj, args);
+            return res instanceof Object ? res : obj;
+        }
+
+        function Person(b, c) {
+            this.a = 1;
+            this.func = () => {
+                console.log(this.a, b, c);
+            };
+        }
+
+        const obj = _new(Person, 123, 321);
+        obj.func();
+    </script>
+</body>
+</html>
