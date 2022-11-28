@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            1.使用Object.entries将对象转化为[ [key, value]...[key1, value1] ]的结构
+            2.对Object.entries得到的数据结构使用reduce,reduce的初始值设置为{}，也就是通过reduce来构造返回值（加工这个空对象）
+                reduce本身的逻辑还是遍历，所以每次reduce的循环体（reduce的回调函数）内的逻辑就是给newValue（reduce初始值{}在循环体内的最近状态、真实引用）添加一个key属性，并且返回添加完属性的newValue
+        */
+        function deepClone(obj) {
+            if(typeof obj !== "object") return obj;
+            return Object.entries(obj).reduce((newValue, [key, value]) => {
+                newValue[key] = deepClone(value);
+                return newValue;
+            }, {})
+        }
+        let test = {
+            name: "jrd",
+            child: {
+                name: "xhr",
+                child: {
+                    name: "dog"
+                }
+            }
+        }
+        console.log(deepClone(test));
+    </script>
+</body>
+</html>
