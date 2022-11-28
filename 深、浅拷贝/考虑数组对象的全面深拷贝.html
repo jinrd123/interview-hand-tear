@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function deepClone(obj) {
+            /*
+                1.我们核心逻辑就是对objClone这个变量的构造，最后构造好了返回，所以第一步判断要克隆的参数是数组还是对象，这决定了我们创建objClone的初始值
+            */
+            let objClone = Array.isArray(obj) ? [] : {};
+            /*
+                2.遍历传入的参数的每一项，对objClone进行构造
+                    for in 遍历obj的每一项好处就是for in不管遍历的obj是数组还是对象，每个循环体获得的是key，通过obj[key]可以访问到obj的具体值
+                    但是使用for in需要搭配 if (obj.hasOwnProperty(key)) （循环体的第一步）,目的是防止for in遍历对象时遍历到对象的原型链上的属性
+            */
+            for (key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    //判断ojb子元素是否为对象，如果是，递归复制
+                    if (typeof obj[key] === "object") {
+                        objClone[key] = deepClone(obj[key]);
+                    } else {
+                        //如果不是，简单复制
+                        objClone[key] = obj[key];
+                    }
+                }
+            }
+            /*
+                3.返回构造的objClone即可
+            */
+            return objClone;
+        }
+    </script>
+</body>
+
+</html>
