@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            sum(1, 2, 3).sumOf(); ——6
+            sum(1)(2)(3).sumOf(); ——6
+        */
+        function sum(...args) {
+            /*
+                1. sum函数可以连续调用，所以函数体的逻辑肯定是返回一个callBack函数
+                2. sum返回的这个callBack函数，一定有一个属于callBack对象的方法callBack.sumOf（类似于类的静态方法，虽然callBack根本不是构造函数，添加方法类似，直接添加给callBack）
+                    callBack.sumOf方法的逻辑就是求和当前sum函数体接收到的args数组
+                3. 通过上面的分析，我们可以确定，callBack函数返回sum函数，参数为曾经的args和新传入callBack的参数的合并
+            */
+            let callBack = function() {
+                return sum(...[...args, ...Array.prototype.slice.call(arguments)]);
+            }
+            callBack.sumOf = function() {
+                return args.reduce((newValue, currentValue) => {
+                    return newValue + currentValue;
+                }, 0)
+            }
+            return callBack;
+        }
+        console.log(sum(1, 2)(4)(6).sumOf());
+    </script>
+</body>
+</html>
