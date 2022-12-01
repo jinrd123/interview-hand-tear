@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function instanceOf(obj, type) {
+            let proto = obj.__proto__;
+            let target = type.prototype;
+            while(true) {
+                if(proto === null) return false;
+                if(proto === target) {
+                    return true;
+                }
+                proto = proto.__proto__;
+            }
+        }
+        console.log(instanceOf({}, Array));
+        console.log(instanceOf([], Array));
+    </script>
+</body>
+</html>
