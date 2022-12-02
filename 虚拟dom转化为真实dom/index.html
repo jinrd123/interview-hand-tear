@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const vNode = {
+            tag: 'DIV',
+            attrs: {
+                id: "123"
+            },
+            children: [
+                {
+                    tag: 'SPAN',
+                    children: [
+                        { tag: 'A', children: [] }
+                    ]
+                },
+                {
+                    tag: 'SPAN',
+                    children: [
+                        { tag: 'A', children: [] },
+                        { tag: 'A', children: [] },
+                        "文本内容", 
+                    ]
+                }
+            ]
+        }
+        function _render(vNode) {
+            /* 
+                传进来的vNode都是正常情况下是一共对象，表示一个父级dom结点
+                也可以传进来数字或者是字符串，那就是默认为文本结点，比如：后面遍历children数组生成当前dom的子dom的时候传进来的是children数组的数组项，如果数组项为数字或者字符串，其实就是给父dom添加一个文本结点（普通的文本内容）
+            */
+            // 如果vNode是数字，就代表想生成一个文本内容，转为字符串
+            if(typeof vNode === 'number') {
+                vNode = String(vNode);
+            }
+            // 字符串类型转为文本结点，因为只有通过document.createTextNode创建的文本结点才能通过dom.appendChild方法添加在dom元素内，而字符串不行
+            if(typeof vNode === 'string') {
+                return document.createTextNode(vNode);
+            }
+            /*
+                处理正常情况：传进来的vNode是一个对象——>生成一个dom元素
+                1.创建一个dom对象
+                2.如果vNode对象有attrs属性（一个对象），我们给创建的dom元素添加属性
+                3.遍历vNode对象的children数组，通过dom.appendChild()方法给dom元素添加子dom元素（dom.appendChild方法的参数递归调用_render函数即可）
+            */
+
+            const dom = document.createElement(vNode.tag);
+
+            if(vNode.attrs) {
+                Object.keys(vNode.attrs).forEach((key) => {
+                    const value = vNode.attrs[key];
+                    dom.setAttribute(key, value);
+                })
+            }
+
+            vNode.children.forEach((child) => dom.appendChild(_render(child)));
+            return dom;
+        }
+
+        console.log(_render(vNode));
+    </script>
+</body>
+</html>
