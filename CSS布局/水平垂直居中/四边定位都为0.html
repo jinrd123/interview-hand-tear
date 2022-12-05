@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /*
+            父元素相对定位，子元素绝对定位，top、bottom、left、right都设置0，再加一个margin：auto实现水平垂直居中的原理：
+                首先就是子绝父相，绝对定位
+                top、bottom、left、right这四个定位属性的含义：元素最外层的margin距离父元素（准确来说是父元素的包含border宽度在内的边界）有多远距离
+                我们把四者都设置为0，也就相当于让四者都与父元素的边界紧靠，因为元素本身没父元素那么大，所以显然是不现实的，所以这时候结合margin:auto属性
+                margin:auto属性的意思就是自动生成margin，因为我们想垂直居中的子元素没有那么大，自然为了满足top、bottom、left、right都为0，就会生成margin
+                自动生成了margin之后，我们中间的子元素就满足了top、bottom、left、right都为0的要求，也就实现了水平垂直居中
+            plus：如果只想垂直居中，我们就可以只保留top、bottom为0，然后margin：auto；水平居中同理。
+        */
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .box {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            border: 10px solid #ff0;
+            padding: 10px;
+            background-color: tomato;
+        }
+        .demo {
+            position: absolute;
+            /* 上下左右均0位置定位 */
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            margin: auto;
+            background-color: turquoise;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="demo"></div>
+    </div>
+</body>
+</html>
