@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+            delete运算符：删除对象的某个属性（在对象中删除这个属性本身（是针对这个对象的一种行为），而不会删除这个属性指向的引用型变量，当然如果没有其它变量指向这个引用变量，也会被垃圾回收）
+            删除方式：
+                1. delete object.property
+                2. delete object["property"]
+            plus:
+                1. delete运算符不能直接删除一个变量（包括普通变量，引用变量，返回false）
+                2. 删除成功返回true，但删除一个对象里不存在的属性也返回true
+        */
+        const data = [
+            {
+                id: 1,
+                text: '节点1',
+                parentId: 0,
+                children: [
+                    {
+                        id: 2,
+                        text: '节点1_1',
+                        parentId: 1
+                    }
+                ]
+            }
+        ]
+        /* 
+            预期输出：
+            [
+                {id: 2, text: '节点1_1', parentId: 1},
+                {id: 1, text: '节点1', parentId: 0}
+            ]
+        */
+        function treeToList(data, ans) {
+            /*
+                法1：构造法，我们接收一个空数组ans
+                函数体内部逻辑遍历data数组获取一个对象，（每次遍历中制造一个空对象），然后遍历当前正在遍历的对象的属性，如果是普通键值对就直接赋值，如果是children子数组就递归调用
+            */
+            data.forEach((item) => {
+                let child = {};
+                Object.entries(item).forEach(([key, value]) => {
+                    if(key !== "children") {
+                        child[key] = value;
+                    }else {
+                        treeToList(value, ans);
+                    }
+                })
+                ans.push(child);
+            })
+        }
+        let ans = [];
+        treeToList(data, ans);
+        console.log(ans);
+
+
+        function treeToList_2(data) {
+            /*
+                我们不接收空数组，直接在函数体内构造一个答案数组res，最后返回这个res
+                定义一个dfs函数，这个函数接收data数组，直接遍历data数组的所有对象，经过处理（dfs(item.children);delete item.children;）后把当前对象放入res中
+                    1. dfs(item.children)是给res数组添加children中的对象
+                    2. delete item.children是给当前遍历的对象删除children属性
+            */
+            let res = [];
+            const dfs = (tree) => {
+                tree.forEach((item) => {
+                    if (item.children) {
+                        dfs(item.children);
+                        delete item.children;
+                    }
+                    res.push(item);
+                });
+            };
+            dfs(data);
+            return res;
+        }
+    </script>
+</body>
+
+</html>
