@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        class PubSub {
+            constructor() {
+                this.message = new Map();
+            }
+            subscribe(type, cb) {
+                if(this.message.has(type)) {
+                    this.message.set(type, [...this.message.get(type), cb]);
+                }else {
+                    this.message.set(type, [cb]);
+                }
+            }
+            publish(type, data) {
+
+                if(!this.message.has(type)) return;
+
+                this.message.get(type).forEach((item)=>item(data));
+            }
+            unsubscribe(type, cb) {
+                if(!this.message.has(type)) {
+                    return;
+                }
+                if(!cb) {
+                    this.message.delete(key);
+                }else {
+                    this.message.set(type, this.message.get(type).filter(item => item !== cb))
+                }
+            }
+        }
+        let pubsub = new PubSub();
+        let fn1 = function(data) {
+            console.log("fn1", data);
+        }
+        let fn2 = function(data) {
+            console.log("fn2", data);
+        }
+        pubsub.subscribe("事件1", fn1);
+        pubsub.subscribe("事件1", fn2);
+        /*
+            pubsub.publish("事件1", 1111);
+            output:
+                fn1 1111
+                fn2 1111
+        */
+        
+        /*
+            pubsub.unsubscribe("事件1", fn1);
+            pubsub.publish("事件1", 12312);
+            output:
+                fn2 12312
+        */
+    </script>
+</body>
+</html>
