@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            题目：给定k个字符串数组，从这k个数组中任意取一个字符串，按顺序拼接，列出所有可能的字符串组合。（不要使用库方法）
+            样例：
+                input : [[“a”, “b”, “cd”], [“de”], [“e”, “f”]]
+                output : [“adee”, “adef”, “bdee”, “bdef”, “cddee”, “cddef”]
+        */
+        function handle(input) {
+            if(input.length === 1) {
+                return input[0];
+            }
+
+            let input_length = input.length;
+            let i = 1;
+            while(i < input_length) {
+                let temp = [];
+                for(let j = 0;j < input[0].length; j ++) {
+                    for(let k = 0;k < input[1].length; k ++) {
+                        temp.push(input[0][j] + input[1][k]);
+                    }
+                }
+                /*
+                    我们的思路是每次合并input数组的前两项，然后删除，然后添加上合并完的结果，这样经过input_length-1次合并，input数组就只有一项input[0]了，也就是最终合并得到的答案
+                */
+                input.splice(0, 2, temp);
+                i++;
+            }
+
+
+            return input[0];
+        }
+        console.log(handle([["a", "b", "cd"], ["de"], ["e", "f"]]))
+    </script>
+</body>
+</html>

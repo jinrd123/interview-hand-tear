@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let arr = [
+            { id: 1, name: '部门1', pid: 0 },
+            { id: 2, name: '部门2', pid: 1 },
+            { id: 3, name: '部门3', pid: 1 },
+            { id: 4, name: '部门4', pid: 3 },
+            { id: 5, name: '部门5', pid: 4 },
+            { id: 6, name: '部门6', pid: 0 },
+        ]
+        function transform_to_tree(arr) {
+
+            /*
+                初始化两个map对象，map_pid的键为pid；map_self的键为id
+                我们先循环遍历arr数组构造出来这两个map
+                这里有个重点：这两个map都是通过arr数组中的对象构造出来的，所以其实这两个map的值是绑定的同一批对象
+            */
+            let map_pid = new Map();
+            let map_self = new Map();
+            arr.forEach((item) => {
+
+                if(!map_pid.has(item.pid)) {
+                    map_pid.set(item.pid, [item]);
+                }else {
+                    map_pid.set(item.pid, [...map_pid.get(item.pid), item])
+                }
+
+                map_self.set(item.id, item);
+            })
+
+            /*
+                plus:forEach遍历map,类似于遍历数组，回调函数的第一个参数是value值，然后才是index,在map也就是key
+                我们遍历map_pid，然后判断if(map_self.has(key))其实就是为了完善map_self结构，此时map_self的每一项是没有children项的，我们这样判断就是想给map_self添加children项
+                经过这一轮遍历，相当于所有有pid的对象都添加到父对象上了 / 所有该有children属性的对象都添加上children属性了
+            */
+            map_pid.forEach((value, key) => {
+                if(map_self.has(key)) {
+                    let value_append_child = map_self.get(key);
+                    value_append_child.children = value;
+                    map_self.set(key, value_append_child);
+                }
+            })
+            /*
+                时这两map,一个以pid为分类标准，一个以id为标准，两者对比，如果map_pid里的pid在map_self中找不到，那么说明map_pid中的这一项就是树的根，我们直接返回即可
+                （map_pid的值本来就是数组的形式，如果键pid没有对应的对象，就说明这个value就是我们要的根数组）
+            */
+            map_pid.forEach((value, key) => {
+                if(!map_self.has(key)) {
+                    return value;
+                }
+            })
+        }
+        transform_to_tree(arr);
+
+    </script>
+</body>
+
+</html>
