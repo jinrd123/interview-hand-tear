@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+            统计字符数组中出现最多的字符以及出现的数量
+        */
+        const arr = ['q', 'w', 'e', 's', 's', 'w', 'w', 'q', 'w', 's', 'w', 'w', 'w', 'w', 'w']
+        function handle(arr) {
+            let code_ans = '';
+            let times_ans = 0;
+            const map = new Map();
+            /*
+                对数组进行一次遍历，用map结构记录每个字符的出现次数，并且每次循环体中都更新当前答案
+            */
+            for (let i = 0; i < arr.length; i++) {
+                /*
+                    map记录
+                */
+                if (map.has(arr[i])) {
+                    map.set(arr[i], map.get(arr[i]) + 1);
+                } else {
+                    map.set(arr[i], 1);
+                }
+                /*
+                    更新结果
+                */
+                if(map.get(arr[i]) > times_ans) {
+                    times_ans = map.get(arr[i]);
+                    code_ans = arr[i];
+                }
+            }
+            return [code_ans, times_ans];
+        }
+        console.log(handle(arr)); // ['w', 9]
+    </script>
+</body>
+
+</html>
