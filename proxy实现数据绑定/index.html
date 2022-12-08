@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="model">
+    <p id="words"></p>
+    <script>
+        const model = document.getElementById("model");
+        const words = document.getElementById("words");
+        const newObj = new Proxy({}, {
+            /*
+                Proxy配置对象的get方法：
+                    target：porxy实例代理的那个对象
+                    key：对象的属性名
+                    receiver：proxy对象实例本身
+                set方法第三个参数value是设置的新值；然后第四个参数才是receiver
+            */
+            get(target, key, receiver) {
+                return Reflect.get(target, key, receiver);
+            },
+            set(target, key, value, receiver) {
+                if(key === 'key') {
+                    model.value = value;
+                    words.innerHTML = value;
+                }
+                return Reflect.set(target, key, value, receiver);
+            }
+        })
+        model.addEventListener('keyup', (e) => {
+            newObj.key = e.target.value;
+        })
+    </script>
+</body>
+</html>
