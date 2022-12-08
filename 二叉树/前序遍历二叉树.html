@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let obj = {
+            id: 4,
+            left: {
+                id: 2,
+                left: {
+                    id: 1,
+                    left: null,
+                    right: null
+                },
+                right: {
+                    id: 3,
+                    left: null,
+                    right: null
+                }
+            },
+            right: {
+                id: 7,
+                left: {
+                    id: 6,
+                    left: null,
+                    right: null
+                },
+                right: {
+                    id: 9,
+                    left: null,
+                    right: null,
+                }
+            },
+        }
+        /*
+            前序的前是说根节点最先遍历
+        */
+        function handle(tree) {
+            if(tree === null) {
+                return;
+            }
+            console.log(tree.id);
+            if(tree.left) {
+                handle(tree.left);
+            }
+            if(tree.right) {
+                handle(tree.right);
+            }
+        }
+        console.log(null === null); // null === null is true
+        console.log(handle(obj))
+    </script>
+</body>
+</html>

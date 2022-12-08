@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let tree = {
+            value: 5,
+            left: {
+                value: 4,
+                left: {
+                    value: 11,
+                    left: {
+                        value: 7,
+                        left: null,
+                        right: null,
+                    },
+                    right: {
+                        value: 2,
+                        left: null,
+                        right: null,
+                    }
+                },
+                right: null,
+            },
+            right: {
+                value: 8,
+                left: {
+                    value: 13,
+                    left: null,
+                    right: null,
+                },
+                right: {
+                    value: 4,
+                    left: null,
+                    right: {
+                        value: 1,
+                        left: null,
+                        right: null
+                    }
+                }
+            }
+        }
+        /*
+            给定一个二叉树和一个数字sum，判断有没有从根节点出发的路径，使这个路径上的所有结点的值加起来等于sum
+        */
+        function hasPathSum(tree, sum) {
+            /*
+                只检查当前结点的value是不是等于sum,如果当前结点没有希望，那么递归检查左右结点（sum = sum - tree.value）
+            */
+            if(tree === null) {
+                return false;
+            }
+            if(tree.value === sum) return true;
+            return hasPathSum(tree.left, sum-tree.value) || hasPathSum(tree.right, sum-tree.value);
+        }
+        console.log(hasPathSum(tree, 22));
+    </script>
+</body>
+</html>
