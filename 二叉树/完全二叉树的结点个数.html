@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let tree = {
+            left: {
+                left: {
+                    left: null,
+                    right: null,
+                },
+                right: {
+                    left: null,
+                    right: null,
+                }
+            },
+            right: {
+                left: {
+                    left: null,
+                    right: null,
+                },
+                right: null
+            }
+        }
+        /*
+            给我们一个完全二叉树（最下层可以不是满的，最下层左边往右必须连续——>只能缺右边）的根节点，求出该树的结点个数
+            完全二叉树重要特点：每一个子节点为根节点都是完全二叉树
+        */
+        function countNodes(root) {
+            /*
+                先判断root是不是一个满二叉树（最下层是满的），如果是满二叉树，结点数 = 2**(二叉树高度) - 1
+                如果不是满二叉树： 结点数 = 1 + 左边完全二叉树结点数 + 右边完全二叉树结点数
+                    经过这样分成左右子树，早晚会分成满二叉树
+            */
+            if(root === null) {
+                return 0;
+            }
+            let l = root.left, r = root.right;
+            let heightL = 0, heightR = 0;
+            while(l !== null) {
+                heightL ++;
+                l = l.left;
+            }
+            while(l !== null) {
+                heightR ++;
+                r = r.right;
+            }
+            if(heightL === heightR) {
+                return 2**(heightL + 1) - 1;
+            }else {
+                return 1 + countNodes(root.left) + countNodes(root.right); 
+            }
+        }
+        console.log(countNodes({left: null,right: null})) // 1
+        console.log(countNodes(tree)); // 6
+    </script>
+</body>
+</html>
