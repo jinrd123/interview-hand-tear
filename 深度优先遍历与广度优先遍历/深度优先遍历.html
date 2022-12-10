@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="parent">
+
+        <div class="children1">
+            <div class="children1-1">
+                <div class="children1-1-1">
+                    a
+                </div>
+            </div>
+        </div>
+
+        <div class="children2">
+            <div class="children2-1">
+                <div class="children2-1-1">c</div>
+            </div>
+            <div class="children2-2">
+                <div class="children2-2-1">d</div>
+            </div>
+        </div>
+
+        <div class="children3">
+            <div class="children3-1">e</div>
+        </div>
+    </div>
+    <script>
+        /*
+            明确遍历的结构类型：
+            某种数据结构包含children数组，数组里面存放若干个相同类型的数据结构我们就可以用深度优先遍历或者广度优先遍历（区分于二叉树的遍历，因为二叉树的left与right都通向一个数据结构，而不是一个children数组，对应的二叉树的遍历就有了前序遍历...方法）
+            DFS：
+                我们借助一个栈结构（先进先出），先放进去我们要遍历的根结点之后，开始循环：
+                如果栈不空：
+                取栈底出栈——>执行遍历逻辑（输出，或者放到一个数组中）——>（倒序）遍历这个结点的children数组的每一项把他们依次放入栈中——>转跳至循环判断条件直至栈空
+        */
+        function DFS(root) {
+            let nodes = []; // 与dfs的套路无关，相当于我们的遍历时的逻辑就是把当前结点放到nodes数组里
+            /*
+                准备好栈，并且放入第一项（初始化）之后，就可以开始循环了
+            */
+            let stack = [];
+            stack.push(root);
+            while (stack.length) {
+                /*
+                    栈底出栈
+                */
+                let currentNode = stack.pop();
+                nodes.push(currentNode);
+                /*
+                    遍历当前结点的children数组，倒序添加到栈顶
+                */
+                for (let i = currentNode.children.length - 1; i >= 0; i--) {
+                    stack.push(currentNode.children[i]);
+                }
+            }
+            return nodes;
+        }
+        let root = document.getElementById("parent");
+        console.log(DFS(root));
+        /*
+            0: div#parent
+            1: div.children1
+            2: div.children1-1
+            3: div.children1-1-1
+            4:div.children2
+            5: div.children2-1
+            6: div.children2-1-1
+            7: div.children2-2
+            8: div.children2-2-1
+            9: div.children3
+            10:div.children3-1
+        */
+    </script>
+</body>
+
+</html>

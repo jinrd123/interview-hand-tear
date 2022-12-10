@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="parent">
+
+        <div class="children1">
+            <div class="children1-1">
+                <div class="children1-1-1">
+                    a
+                </div>
+            </div>
+        </div>
+
+        <div class="children2">
+            <div class="children2-1">
+                <div class="children2-1-1">c</div>
+            </div>
+            <div class="children2-2">
+                <div class="children2-2-1">d</div>
+            </div>
+        </div>
+
+        <div class="children3">
+            <div class="children3-1">e</div>
+        </div>
+    </div>
+    <script>
+        /*
+            BFS广度优先遍历和深度优先遍历唯一的区别就是：用队列作为遍历的数据结构，先进先出（push放进去，shift取出来）
+        */
+        function BFS(root) {
+            let nodes = [];
+            let queue = [];
+            queue.push(root);
+            while (queue.length) {
+                /*
+                    队首出队
+                */
+                let currentNode = queue.shift();
+                nodes.push(currentNode);
+                /*
+                    遍历当前结点的children数组，顺序添加到队尾即可
+                */
+                for (let i = 0; i < currentNode.children.length; i++) {
+                    queue.push(currentNode.children[i]);
+                }
+            }
+            return nodes;
+        }
+        let root = document.getElementById("parent");
+        console.log(BFS(root));
+        /*
+            div#parent
+            div.children1
+            div.children2
+            div.children3
+            div.children1-1
+            div.children2-1
+            div.children2-2
+            div.children3-1
+            div.children1-1-1
+            div.children2-1-1
+            div.children2-2-1
+        */
+    </script>
+</body>
+
+</html>
