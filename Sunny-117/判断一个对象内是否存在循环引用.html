@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+            何为循环引用? 
+                比如一个对象，它的某个属性，或者属性的属性pro，访问之后又回到了一个当前属性的父辈属性（从父辈属性中向下访问可以访问到pro）——>形成了一个“环”
+        */
+        /*
+            只管当前层，判断target对象的所有属性在不在src中（src用来存放“源”，这个源就是指函数逻辑内循环所有属性时，这个属性到根对象的一条链——>src中存放了当前遍历属性的所有父引用）
+        */
+        function findLoop(target, src) {
+            // 先把自己放入src
+            const source = [...src, target];
+
+            /*
+                遍历当前对象的每一个属性，如果在“源”数组中找到了它自己，或者把它自己放进去之后它的孩子能在源数组中找到自己（findLoop(target[key], source)），那么就是循环引用
+            */
+            for (const key in target) {
+                // 如果是对象才需要判断
+                if (typeof target[key] === 'object') {
+                    // 如果在源数组中找到 || 递归查找内部属性找到相同
+                    if (source.indexOf(target[key]) > -1 || findLoop(target[key], source)) {
+                        return true
+                    }
+                }
+            }
+            return false
+        }
+        function hasLoop(obj) {
+
+            // 如果传入值是对象，则执行判断，否则返回false
+            return typeof obj === 'object' ? findLoop(obj, []) : false
+        }
+        let a = {};
+        let obj = {a};
+        obj.b = a;
+        console.log(hasLoop(obj)); // false
+
+        let test = {}
+        test.a = test;
+        console.log(hasLoop(test)); // true
+    </script>
+</body>
+
+</html>
