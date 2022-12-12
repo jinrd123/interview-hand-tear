@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+            shallowReadonly和readonly的实现逻辑完全与shallowReactive和reactive的实现逻辑一样，他们两组的不同就在于new Proxy时的配置对象不同
+            shallowReadonly和readonly的proxy配置对象的核心就在于set方法直接返回true而不执行Reflect.set进行修改数据（deleteProperty也一样）
+        */
+        const readonlyHandler = {
+            get(target, key) {
+                if (key === '_is_readonly') return true
+
+                return Reflect.get(target, key)
+            },
+
+            set() {
+                console.warn('只读的, 不能修改')
+                return true
+            },
+
+            deleteProperty() {
+                console.warn('只读的, 不能删除')
+                return true
+            },
+        }
+
+        function shallowReadonly(obj) {
+            return new Proxy(obj, readonlyHandler)
+        }
+
+        function readonly(target) {
+            if (target && typeof target === 'object') {
+                if (target instanceof Array) { // 数组
+                    target.forEach((item, index) => {
+                        target[index] = readonly(item)
+                    })
+                } else { // 对象
+                    Object.keys(target).forEach(key => {
+                        target[key] = readonly(target[key])
+                    })
+                }
+                const proxy = new Proxy(target, readonlyHandler)
+
+                return proxy
+            }
+
+            return target
+        }
+
+        // /* 测试自定义readonly */
+        // /* 测试自定义shallowReadonly */
+        // const objReadOnly = readonly({
+        //     a: {
+        //         b: 1
+        //     }
+        // })
+        // const objReadOnly2 = shallowReadonly({
+        //     a: {
+        //         b: 1
+        //     }
+        // })
+
+        // objReadOnly.a = 1
+        // objReadOnly.a.b = 2
+        // objReadOnly2.a = 1
+        // objReadOnly2.a.b = 2
+    </script>
+</body>
+
+</html>

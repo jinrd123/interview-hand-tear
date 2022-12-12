@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+            首先说一下用proxy对一个对象obj进行代理的特点：
+                get和set方法可以对obj的第一层进行完全劫持，也就是说直接访问obj的属性（obj.xxx）可以被get劫持；给obj添加属性，可以被set劫持；而且后来添加上去的属性如果是第一层的属性，以后访问这个属性也是可以被get劫持的
+                概括来说，proxy对象对obj实现了第一层的完全代理（深层无法代理）
+            对一个数组arr进行代理的话，完全类似与代理一个对象，对这个数组的第一层进行了代理，访问arr[index]触发get，设置arr[index]时触发set
+        */
+        const reactiveHandler = { // new Proxy的配置对象，只是简单的进行劫持，更新视图的逻辑已省略
+            get(target, key) {
+
+                if (key === '_is_reactive') return true
+
+                return Reflect.get(target, key)
+            },
+
+            set(target, key, value) {
+                const result = Reflect.set(target, key, value)
+                console.log('数据已更新, 更新视图的逻辑')
+                return result
+            },
+
+            deleteProperty(target, key) {
+                const result = Reflect.deleteProperty(target, key)
+                console.log('数据已删除, 更新视图的逻辑')
+                return result
+            },
+        }
+
+        /*
+            shallowReactive就是对对象的第一层进行代理,所以我们基本啥也不用做，直接用new Proxy，直接第一个参数把obj放上，然后用上面的基本配置对象就完成了对第一层的代理（数据劫持）
+        */
+        function shallowReactive(obj) {
+            return new Proxy(obj, reactiveHandler)
+        }
+
+        /*
+            reactive：对于普通类型的变量，直接返回；对于引用类型的变量，不管是数组还是对象，其每一个子属性也都要实现代理
+                所以第一层if else先判断是否为引用型变量，如果是引用型变量——>第二层if else就判断是数组还是对象，逻辑都一样：给数组或者对象的每一个属性递归调用reactive进行代理
+        */
+        function reactive(target) {
+            if (target && typeof target === 'object') {
+                if (target instanceof Array) { // 数组
+                    target.forEach((item, index) => {
+                        target[index] = reactive(item)
+                    })
+                } else { // 对象
+                    Object.keys(target).forEach(key => {
+                        target[key] = reactive(target[key])
+                    })
+                }
+
+                const proxy = new Proxy(target, reactiveHandler)
+                return proxy
+            }
+
+            return target
+        }
+
+        // /* 测试自定义shallowReactive */
+        // const proxy = shallowReactive({
+        //     a: {
+        //         b: 3
+        //     }
+        // })
+
+        // proxy.a = { b: 4 } // 劫持到了
+        // proxy.a.b = 5 // 没有劫持到
+
+
+        // /* 测试自定义reactive */
+        // const obj = {
+        //     a: 'abc',
+        //     b: [{ x: 1 }],
+        //     c: { x: [11] },
+        // }
+
+        // const proxy = reactive(obj)
+        // console.log(proxy)
+        // proxy.b[0].x += 1
+        // proxy.c.x[0] += 1
+    </script>
+</body>
+
+</html>

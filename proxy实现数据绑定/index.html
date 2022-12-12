@@ -12,6 +12,10 @@
     <script>
         const model = document.getElementById("model");
         const words = document.getElementById("words");
+        /*
+            其实这里newObj这个proxy代理对象就相当于MVVM中的VM，它代理的那个{}就相当于M，我们通过对{}的代理（set时修改dom），就实现了数据改变视图改变
+            我们还需要实现试图改变让数据进行改变，所以下面model.addEventListener就相当于试图改变去修改数据
+        */
         const newObj = new Proxy({}, {
             /*
                 Proxy配置对象的get方法：

@@ -40,7 +40,7 @@
                 {id: 1, text: '节点1', parentId: 0}
             ]
         */
-        function treeToList(data, ans) {
+        function treeToList(data, ans = []) {
             /*
                 法1：构造法，我们接收一个空数组ans
                 函数体内部逻辑遍历data数组获取一个对象，（每次遍历中制造一个空对象），然后遍历当前正在遍历的对象的属性，如果是普通键值对就直接赋值，如果是children子数组就递归调用
@@ -56,10 +56,10 @@
                 })
                 ans.push(child);
             })
+            return ans;
         }
         let ans = [];
-        treeToList(data, ans);
-        console.log(ans);
+        console.log(treeToList(data, ans));
 
 
         function treeToList_2(data) {
