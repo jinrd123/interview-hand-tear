@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            快速排序就是在数组中随便找一个基准元素，然后把数组中的其它元素进行划分，比基准元素小的在一边，比基准元素大的在一边
+        */
+        const arr = [11, 2, 2, 4, 3, 7, 89];
+        function quickSort(arr) {
+            /*
+                我们用递归思想，只处理第一层
+                    退出递归的条件：数组元素小于2个，不用排了直接返回
+                    以arr[0]为基准元素，arr.slice(1).filter找出比基准小和大的元素数组
+                    最后concat拼接三者
+                        quickSort(minArr) + arr[0] + quickSort(maxArr)
+            */
+            if(arr.length <= 1) {
+                return arr;
+            }
+            let middle = arr[0];
+            let minArr = arr.slice(1).filter((item) => (item < middle));
+            let maxArr = arr.slice(1).filter((item) => (item >= middle));
+            return quickSort(minArr).concat([middle]).concat(quickSort(maxArr));
+        }
+        console.log(quickSort(arr));
+    </script>
+</body>
+</html>

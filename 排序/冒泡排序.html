@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const arr = [11, 2, 2, 4, 3, 7, 89];
+        /*
+            对arr进行冒泡排序就是两层for循环
+                第一层for循环循环arr.length次，就是指每一次把数组中最大的元素移动到数组的最后
+                第二层for循环循环arr.length-i次（i就是外层for的循环次数，表示最后的i个元素已经排好序了），这个for循环就是两两比较，一直把比较大的那个元素后移
+        */
+        function bubbleSort(arr) {
+            for(let i = 0;i < arr.length - 1;i ++) {
+                for(let j = 0;j < arr.length - i;j ++) {
+                    if(j > 0 && arr[j] < arr[j - 1]) {
+                        [arr[j], arr[j - 1]] = [arr[j - 1], arr[j]];
+                    }
+                }
+            }
+            return arr;
+        }
+        console.log(bubbleSort(arr))
+        console.log(bubbleSort([]))
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            解析见leetcode刷题笔记 剑指 Offer 38. 字符串的排列
+        */
+        function permutation(str) { // permutation:排列
+            str = str.split("").sort((a, b) => (a > b ? 1 : -1)).join("");
+            let ans = [];
+            const dfs = (currentStr, leftStr) => {
+                if(leftStr.length === 0) {
+                    ans.push(currentStr);
+                    return;
+                }
+                for(let i = 0;i < leftStr.length;i ++) {
+                    if(i > 0 && leftStr[i] === leftStr[i - 1]) {
+                        continue;
+                    }
+                    dfs(currentStr + leftStr[i], leftStr.slice(0, i) + leftStr.slice(i + 1));
+                }
+            }
+            dfs("", str);
+            return ans;
+        }
+        console.log(permutation("acc"))
+    </script>
+</body>
+</html>
