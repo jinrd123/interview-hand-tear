@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+            shallowRef就是只对 .value 进行数据劫持，如果 .value 是个对象，不对对象进行reactive处理
+        */
+        function shallowRef(target) {
+            /*
+                说白了我们用一个对象来模拟ref对象，我们用_value来存储传给shallowRef的参数，对于这个对象的value属性，我们使用get与set进行拦截：get就直接返回_value;set更新_value，然后更新视图
+            */
+            const result = {
+                _value: target, // 用来保存数据的内部属性
+                _is_ref: true, // 用来标识是ref对象
+                get value() {
+                    return this._value
+                },
+                set value(val) {
+                    this._value = val
+                    console.log('set value 数据已更新, 去更新界面')
+                }
+            }
+
+            return result
+        }
+
+        /*
+            与shallowRef不同之处就在于如果target是一个对象的话，就把对象本身弄成响应式的对象
+        */
+        function ref(target) {
+            if (target && typeof target === 'object') {
+                target = reactive(target)
+            }
+
+            const result = {
+                _value: target, // 用来保存数据的内部属性
+                _is_ref: true, // 用来标识是ref对象
+                get value() {
+                    return this._value
+                },
+                set value(val) {
+                    this._value = val
+                    console.log('set value 数据已更新, 去更新界面')
+                }
+            }
+
+            return result
+        }
+
+        // /* 测试自定义shallowRef */
+        // const ref3 = shallowRef({
+        //     a: 'abc',
+        // })
+        // ref3.value = 'xxx'
+        // ref3.value.a = 'yyy'
+
+
+        // /* 测试自定义ref */
+        // const ref1 = ref(0)
+        // const ref2 = ref({
+        //     a: 'abc',
+        //     b: [{ x: 1 }],
+        //     c: { x: [11] },
+        // })
+        // ref1.value++
+        // ref2.value.b[0].x++
+        // console.log(ref1, ref2)
+    </script>
+</body>
+
+</html>
