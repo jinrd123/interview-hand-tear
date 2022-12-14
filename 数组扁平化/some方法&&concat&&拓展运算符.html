@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+            some会遍历数组中的每个元素，让每个值都执行一遍callback函数;如果有一个元素满足条件，返回true , 剩余的元素不会再执行检测
+        */
+        let arr = [1, [2, [3, 4]]];
+        function flatten(arr) {
+            /*
+                通过some方法判断当前数组是不是[ ... [...] ... ]有这种情况
+            */
+            while (arr.some(i => Array.isArray(i))) {
+                /*
+                    其实去重的核心就在于concat方法的特性：concat接收单个元素和接收一个数组效果是一样的（单个元素或者数组在concat拼接之后都在同一层级）
+                    拓展运算符展开arr之后，arr就变成了一些单个元素与数组，合并之后在同一级，相当于展开了一层
+                */
+                arr = [].concat(...arr);
+            }
+            return arr;
+        }
+        console.log(flatten(arr)); //  [1, 2, 3, 4，5]
+        console.log([].concat("hhh"))
+    </script>
+</body>
+
+</html>

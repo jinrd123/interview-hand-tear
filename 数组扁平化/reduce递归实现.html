@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let arr = [1, [2, [3, 4]]];
+        function flatten(arr) {
+            /*
+                直接返回reduce构造出来的数组
+            */
+            return arr.reduce(function (pre, cur) {
+                /*
+                    reduce的内部逻辑就是pre一直concat数组的每一项，如果这一项是数组的话就递归调用flatten
+                */
+                return pre.concat(Array.isArray(cur) ? flatten(cur) : cur)
+            }, [])
+        }
+        
+    </script>
+</body>
+
+</html>

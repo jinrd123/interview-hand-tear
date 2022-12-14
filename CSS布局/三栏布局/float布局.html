@@ -25,6 +25,7 @@
         }
 
         .center {
+            /* 牵扯一个浮动元素脱离标准流，会覆盖在标准流元素之上的问题，所以我们把中间的center设置margin，让浮动元素覆盖在center的margin之上，这样就不会覆盖内容 */
             margin-left: 300px;
             margin-right: 300px;
             background-color: #4990E2;

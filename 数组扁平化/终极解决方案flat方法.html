@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+            Array.prototype.flat(n):
+                如果数组中有数组元素，那么把数组元素扒n层皮
+                比如 
+                    const arr2 = [0, 1, 2, [[[3, 4]]]]; 
+                    arr2.flat(2) 
+                arr2中有[[[3, 4]]]，有三层皮，扒两层皮之后就是[3, 4]，所以arr2.flat(2) 的结果就是[0, 1, 2, [3, 4]]
+        */
+        function flatten(arr) {
+            /*
+                借助js中的一个特殊的数字 Infinity（正无穷大）——> typeof Infinity === "number"
+            */
+            return arr.flat(Infinity);
+        }
+    </script>
+</body>
+
+</html>
