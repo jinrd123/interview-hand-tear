@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            不推荐下面的解法
+        */
+        /*
+            其实为了实现间隔几秒输出一个颜色，函数体内完全没必要把逻辑包装在一个new Promise的执行器中，只保留setTimeout，然后循环调用三个函数就行
+                其实我们思考一下我们把原本直接执行的代码逻辑放到new Promise的执行器中有什么好处，说白了就是我们
+                return出去这个new Promise，然后new Promise的执行器中可以使用resolve，resolve(异步代码的结果),这样我们就能拿到一个含有异步代码结果的promise，然后获取异步结果
+                不放在new Promise中执行代码，是拿不到异步结果的
+            但是我们加了return new Promise的好处就是我们可以获得到函数返回值：red函数返回的promise成功的原因是绿灯（返回值本身没什么意义）
+        */
+        function red() {
+            return new Promise((resolve) => {
+                console.log('当前是红灯，3秒后变成绿灯');
+                setTimeout(() => {
+                    const greenPromise = green();
+                    resolve(greenPromise);
+                }, 3000);
+            })
+        }
+        function green() {
+            return new Promise((resolve) => {
+                console.log('当前是绿灯，5秒后变成黄灯');
+                setTimeout(() => {
+                    const yellowPromise = yellow();
+                    resolve(yellowPromise);
+                }, 5000);
+            })
+        }
+        function yellow() {
+            return new Promise((resolve) => {
+                console.log('当前是黄灯，2秒后变成红灯');
+                setTimeout(() => {
+                    const redPromise = red();
+                    resolve(redPromise);
+                }, 2000);
+            })
+        }
+        red();
+    </script>
+</body>
+</html>
