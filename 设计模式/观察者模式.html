@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            观察者模式中有两个对象： 观察者 与 被观察的对象
+                被观察的对象可以有多个观察者，被观察的对象触发某个事件，通知所有观察它的观察者，然后观察者执行响应的回调
+            说白了观察者模式就是：
+        */
+        class Observer {
+            /*
+                观察者类的逻辑里，其实只需要有响应的回调函数就行了，它只是被动的等待执行
+            */
+            constructor(name) {
+                this.name = name;
+            }
+            callBack(...args) {
+                console.log(`${this.name}观察到目标的改变，这里执行回调`, args);
+            }
+        }
+
+        class Subject {
+            /*
+                被观察的对象需要有一个观察者数组，存放所有观察它的观察者
+                需要一个add方法，添加观察者
+                一个notify方法，通知所有的观察者去执行回调
+                remove移除指定的观察者
+            */
+            constructor() {
+                this.observers = [];
+            }
+
+            add(observer) {
+                this.observers.push(observer);
+            }
+
+            remove(observer) {
+                this.observers = this.observers.filter((item) => item !== observer);
+            }
+
+            notify(...args) {
+                this.observers.forEach(observer => {
+                    observer.callBack(...args);
+                })
+            }
+        }
+
+        let observer1 = new Observer("jrd");
+        let observer2 = new Observer("xhr");
+
+        let sub = new Subject();
+        sub.add(observer1);
+        sub.add(observer2);
+
+        sub.notify(1, 2, 3);
+    </script>
+</body>
+</html>
