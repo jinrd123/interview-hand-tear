@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+            核心api：new Date().getTime()——获取当前时间戳
+            核心逻辑：计算过去了多久，时间不够就一直while占用同步代码的执行逻辑
+        */
+        function sleep(time) {
+            const startDate = new Date().getTime()
+            while (new Date().getTime() - startDate < time) { }
+        }
+        sleep(3000)
+        console.log(`sleep exe ending!`)
+
+    </script>
+</body>
+
+</html>

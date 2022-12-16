@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function sleep(delay) {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve();
+                },delay)
+            })
+        } 
+
+        /*
+            这个函数有两种用法
+        */
+        // 1. 搭配then指定sleep后面的逻辑，实现sleep延迟效果
+        sleep(2000).then(() => {
+            console.log("延迟两秒后的逻辑");
+        })
+        // 2. 在async函数中搭配await实现延迟（await就是对then的包装）
+        async function test() {
+            await sleep(2000);
+            console.log("延迟两秒后的逻辑");
+        }
+        test();
+    </script>
+</body>
+</html>
