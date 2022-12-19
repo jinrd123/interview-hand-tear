@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const arr = [1, [2, 3, [4, 5]], 1, 2, [6, 7]]
+        Array.prototype.myFlat = function(deep = 1) {
+            /*
+                flat不会修改原数组，所以要构造ans并返回
+                核心思路就是每次展开展一层
+                    展一层的方法就是：解构数组之后传给concat （原理见../数组扁平化/some方法&&concat&&拓展运算符.html）
+            */
+            let ans = [];
+            while(deep > 0) {
+            //while(this.some(item => Array.isArray(item)) && deep > 0) {  ——>这里其实可以结合some方法进行性能的优化：如果子项没有数组就不用展开了
+                ans = ans.concat(...this);
+                deep --;
+            }
+            return ans;
+        }
+        console.log(arr.myFlat(1)); // [1, 2, 3, [4, 5], 1, 2, 6, 7]
+    </script>
+</body>
+</html>
