@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const _completeDeepClone = (target, map = new WeakMap()) => {
+            // 基本数据类型，直接返回
+            if (typeof target !== 'object' || target === null) return target
+            // 函数 正则 日期 ES6新对象——>先通过对象的constructor属性拿到构造函数，然后用对象本身作为构造函数的参数进行拷贝
+            const constructor = target.constructor
+            if (/^(Function|RegExp|Date|Map|Set)$/i.test(constructor.name)) return new constructor(target)
+            // 循环引用的问题是针对{}和[]的，也就是说我们的WeakMap里面存放引用型变量，但是只存放{}和[],经过上面的两个if—return确保走到这一步的target已经是一个{}或者[]了，所以我们在这里才使用WeakMap
+            if (map.get(target)) return target; // 先判断WeakMap里面有没有target这个{}或者[]，如果有直接返回就可以了，也就完成了循环引用（不至于进入死循环）
+            map.set(target, true); // 更新WeakMap，存放当前target
+            /*
+                循环遍历target的每一个属性，递归调用深拷贝
+            */
+            const cloneTarget = Array.isArray(target) ? [] : {}
+            for (prop in target) {
+                if (target.hasOwnProperty(prop)) {
+                    cloneTarget[prop] = _completeDeepClone(target[prop], map)
+                }
+            }
+            return cloneTarget
+            /*
+                面试官问优化思路的话：
+                    cloneTarget[prop] = _completeDeepClone(target[prop], map)你会发现即使一些普通类型的变量，也是进入了_completeDeepClone才返回，所以有很多不必要的递归深度
+                    优化就是可以把一些判断逻辑写到if (target.hasOwnProperty(prop)) {} 里面，减少递归深度
+            */
+        }
+    </script>
+</body>
+
+</html>
