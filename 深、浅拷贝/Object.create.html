@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+            如果只是用js的一个api去实现一个深拷贝，能想到的就是Object.create了，其实算不上真正意义的深拷贝，但是有完全类似的效果：
+                我们新创建的对象的原型对象是被拷贝对象，自然我们能访问到原型对象的一切属性与方法，而且我们在拷贝对象本身上修改属性方法都有一种覆盖效果（不会影响原型对象）
+                !:但是如果我们修改原型对象（被拷贝对象），并且恰好拷贝对象没有对原型对象上的某一属性方法进行重写，那么这个修改就会影响拷贝对象了
+            当然api法还有JSON两个方法的使用
+        */
+        const person = {
+            isHuman: false,
+            printIntroduction: function () {
+                console.log(`My name is ${this.name}. Am I human? ${this.isHuman}`);
+            }
+        };
+        const me = Object.create(person);
+    </script>
+</body>
+
+</html>

@@ -26,6 +26,29 @@
         }
         console.log(bubbleSort(arr))
         console.log(bubbleSort([]))
+        /*
+            优化思路：
+                最外层for的目的就是每次让一个元素移动到最后（变得有序），让n个元素有序，循环只需要n - 1次即可 ——>  循环次数为(i = 1;i < arr.length - 1;)
+                最外层每次循环体完成之后，数组都有可能已经为有序状态，所以我们在最外层循环的循环体中增加判断数组是否有序的逻辑来及时跳出循环
+        */
+        function bubbleSort_improved(arr) {
+            for(let i = 1;i < arr.length - 1;i ++) {
+                let isSorted = true;
+                for(let j = 0;j < arr.length - 1 - i;j ++) {
+                    if(j > 0 && arr[j] < arr[j - 1]) {
+                        /*
+                            进来这个if，就说明当前这一轮还不是有序数组
+                        */
+                        isSorted = false;
+                        [arr[j], arr[j - 1]] = [arr[j - 1], arr[j]];
+                    }
+                }
+                if(isSorted) {
+                    break;
+                }
+            }
+            return arr;
+        }
     </script>
 </body>
 </html>

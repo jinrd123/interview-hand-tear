@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function parseParam(url) {
+            /*
+                拿到浏览器地址中"?"后面的字符串
+                    /.+\?(.+)$/解析：
+                        ([]之外，)"."表示任意字符，".+"表示任意字符出现一次或者多次（即不为空）；"?"本身表示前面的字符出现0次或1次，"\?"即为匹配"?"本身；(.+)同为非空字符串，但是这一部分匹配到的内容会在exec、match函数中单独存放（arr[1]）; $表示字符串末尾
+            */
+            const paramsStr = /.+\?(.+)$/.exec(url)[1];
+            let ans = {};
+            paramsStr.split("&").forEach((item) => {
+                /*
+                    循环体的逻辑就是拿到value之后需要先对value进行一个解码
+                    然后在构造对象的键值对之前判断是否需要进行转换为数字（全看个人设计了）
+                */
+                let [key, value] = item.split("=");
+                let decodeValue = decodeURIComponent(value)
+                if(/^\d+$/.test(decodeValue)) {
+                    ans[key] = parseInt(decodeValue);
+                }else {
+                    ans[key] = decodeValue;
+                }
+            })
+            return ans;
+        }
+        let url = 'https://www.baidu.com?username=%22tmc%22&password=%22123456%22&dutiy=%E5%89%8D%E7%AB%AF%E6%94%BB%E5%9F%8E%E7%8B%AE&flag=123';
+        console.log(parseParam(url));
+        /*
+            {username: '"tmc"', password: '"123456"', dutiy: '前端攻城狮', flag: 123}
+        */
+       let url2 = `https://www.baidu.com?url=${encodeURIComponent("name=0&age=19")}`;
+       console.log(parseParam(url2));
+       /*   
+            我们想传递的某个参数的参数值中如果含有"&"，这时候为了不让其解析为参数与参数之间的分隔符，我们就需要对这个value值进行encodeURIComponent编码处理
+            所以为了正确解析进行编码后的query参数，我们在拿到value值时需要进行一次decodeURIComponent
+                plus：如果对一个字符串重复进行encodeURIComponent，那么每次编码都有效（可以重复编码）；但是如果对一个没有加密的字符串进行decodeURIComponent，那么不会过分解码（字符串保持不变）
+            {url: 'name=0&age=19'}
+       */
+    </script>
+</body>
+</html>
