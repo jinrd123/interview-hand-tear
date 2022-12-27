@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let insertSort = (arr) => {
+            /*
+                外层一个for循环，i=1开始，i表示数组的前i-1个元素是有序的，我们把第i个元素插入到一个合适的位置，然后其它元素进行位移
+            */
+            for(let i = 1; i < arr.length; i++) {
+                /*
+                    记录当前考察的，第i个元素
+                */
+                let currentValue = arr[i];
+                /*
+                    j从i-1到0，表示依次考察前i-1个有序元素，倒着考察，让currentValue和arr[j]进行比较，如果合适就把arr[j]后移一位：arr[j + 1] = arr[j]
+                    最后
+                */
+                let j = i - 1;
+                while(j >= 0 && currentValue < arr[j]) {
+                    arr[j + 1] = arr[j];
+                    j --;
+                }
+                /*
+                    最后一个移动的元素，对应的j其实是j+1，因为移动之后必定--
+                */
+                arr[j + 1] = currentValue;
+            }
+            return arr;
+        }
+        const arr = [11, 2, 2, 4, 3, 7, 89];
+        console.log(insertSort(arr));
+    </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            所谓选择排序，其实和冒泡排序很像，都是外层一个for(let i = 0;;)循环，每个循环体内逻辑的目的就是找出数组中最大或者最小的元素，然后放到i位置处（让i位置变得有序）
+            和冒泡的区别就是：
+                两者都是外层for，每次让一个位置变得有序，但是冒泡循环体内交换更加频繁；这个选择排序就是先找到最小或者最大的元素的位置，然后进行一个交换
+        */
+        let SelectSort = (arr) => {
+            for(let i = 0;i < arr.length - 1;i ++) {
+                /*
+                    1. 默认i位置为最小位置
+                    2. 一个循环更新最下位置
+                    3. 交换最小元素与i位置元素
+                */
+                let currentMinIndex = i;
+                for(let j = i;j < arr.length;j ++) {
+                    if(arr[j] < arr[currentMinIndex]) {
+                        currentMinIndex = j;
+                    }
+                }
+                [arr[i], arr[currentMinIndex]] = [arr[currentMinIndex], arr[i]];
+            }
+            return arr;
+        }
+        const arr = [11, 2, 2, 4, 3, 7, 89];
+        console.log(SelectSort(arr));
+    </script>
+</body>
+</html>
