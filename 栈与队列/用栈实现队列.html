@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*
+            用栈实现队列（即使用栈方法pop、push实现队列的push、shift行为）
+            MyQueue类包装两个栈，inStack作为入栈，接收元素时使用；outStack为出栈，shift元素时使用
+        */
+        class MyQueue {
+            constructor() {
+                this.inStack = [];
+                this.outStack = [];
+            }
+            // 执行myPush时需要把元素全部转移到inStack中
+            myPush(data) {
+                // inStack为空我们就转移，确保元素如果有一定在inStack中
+                if(this.inStack.length === 0) {
+                    while(this.outStack.length !== 0) {
+                        this.inStack.push(this.outStack.pop());
+                    }
+                }
+                this.inStack.push(data);
+                // 最后注意push方法的返回值应为数组加入元素后的长度
+                return this.inStack.length;
+            }
+            myShift() {
+                // 转移元素至出栈outStack中
+                if(this.outStack.length === 0) {
+                    while(this.inStack.length !== 0) {
+                        this.outStack.push(this.inStack.pop());
+                    }
+                }
+                // shift方法的返回值（同pop）为弹出的元素
+                return this.outStack.pop();
+            }
+        }
+        const myQueue = new MyQueue();
+        myQueue.myPush("jrd");
+        myQueue.myPush("xhr");
+        let data = myQueue.myShift();
+        console.log(data);
+    </script>
+</body>
+</html>
