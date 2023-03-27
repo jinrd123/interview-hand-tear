@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function Phone(brand, price) {
+            this.brand = brand;
+            this.price = price;
+        }
+        Phone.prototype.call = function () {
+            console.log("手机打电话");
+        };
+
+        function smartPhone(brand, price, color, size) {
+            Phone.call(this, brand, price);
+            this.color = color;
+            this.size = size;
+        }
+
+        // 组合继承的逻辑：以下前三行换成smartPhone.prototype = new Phone();
+        // 寄生式组合继承的逻辑：我们创建一个空的构造函数，修改它的prototype为我们想要的父类的prototype，说白了我们只是想拿到父类的prototype上挂载的方法，而不想要父类执行一遍构造函数的函数体
+        // 所以说我们用Super.prototype来拿到（记录）父类的prototype，然后子类的prototype设置为Super类的一个实例，说白了就是父类构造函数函数体的执行换成了一个空构造函数的执行
+        function Super() {}
+        Super.prototype = Phone.prototype;
+        smartPhone.prototype = new Super();
+        smartPhone.prototype.constructor = smartPhone;
+    </script>
+</body>
+
+</html>

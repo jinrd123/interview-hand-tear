@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /*
+        组合继承注意的点有两个：
+            1.子类里通过call方法调用父类的构造函数，相当于给子类添加上父类所拥有的属性
+            2.子类构造函数的prototype对象修改为一个父类的实例
+        缺点：子类里调用父类构造函数的本意是给子类添加父类所拥有的属性，修改子类构造函数对象的prototype属性是想让子类实例可以通过obj.__proto__.__proto__访问到挂载到父类的prototype对象上的方法
+            这样就相当于父类的构造函数执行了两次，上面2.的执行目的是为了拿到父类prototype上的方法，没必要执行构造函数的函数体，所以为了解决这个冗余，就有了所谓的“寄生式组合继承”
+      */
+      function Phone(brand, price) {
+        this.brand = brand;
+        this.price = price;
+      }
+      Phone.prototype.call = function () {
+        //添加类方法就在Phone.prototype上添加
+        console.log("手机打电话");
+      };
+      Phone.Chinese_name = "手机"; //给手机类添加静态属性，只属于Phone类，而不属于Phone实例（因为Phone类的实例对象只能通过__proto__访问到Phone.prototype，而和Phone这个对象没有直接联系了）
+
+      function smartPhone(brand, price, color, size) {
+        /*
+    	    smartPhone继承Phone，就执行Phone构造函数即可（完成添加父类属性）
+        */
+        Phone.call(this, brand, price); //new smartPhone时new运算符已经把smartPhone的this修改了，指向构造的那个空对象，所以在实例化smartPhone时this不会指向window（说白了因为不是直接调用smartPhone，而是通过new运算符）
+        this.color = color; //添加本身特有属性
+        this.size = size;
+      }
+
+      //让smartPhone.prototype等于父类的一个实例对象，new Phone不带参数，所以这个父类实例对象没有自身的属性，只是提供一个__proto__对象
+      smartPhone.prototype = new Phone();
+      smartPhone.prototype.constructor = smartPhone;
+    </script>
+  </body>
+</html>
