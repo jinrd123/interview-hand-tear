@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 首先我们先明确归并排序的思想：
+        /**
+         * 我们拿到要排序的数组，有多少个数组元素就相当于把数组分成了多少份（子数组），因为每份（子数组）都相当于一个元素，所以都是有序的
+         * 然后我们两两合并有序数组，得到更长的有序数组
+         * 一直重复两两合并的逻辑，直至分成的份数为一份，这时候也就相当于完成了整个数组的排序
+         * 
+         * 解题思考：
+         * 如下每个编号代表了我们一开始拿到的数组的每一项，这时候相当于把数组分成了有序的十份（每份大小都是1）
+         * 1.  2.  3.  4.  5.  6.  ...  10. 
+         * 1.和2.合并、3.和4.合并...这种思维是我们从底向上思考的一个符合人类思考逻辑的思维
+         * 但是我们要敏感，这种两两合并并且重复同一个过程的操作，其实是符合计算机递归计算的逻辑的，也就是说完成整个是由无数个两两合并的操作完成的，像金字塔一样，从底向上直至合成一个
+         * 直接递归：定义递归函数的作用：接收一个无序数组，使其变为有序数组，然后我们只管一层，把接收到的无序数组分成两份，两份都递归调用排序函数变为有序数组；最后通过合并函数完成两个有序数组的合并
+        */
+        const mergeSort = function(arr) {
+
+            // 递归函数结束的条件：数组长度为1，即为有序
+            const length = arr.length;
+            if(length === 1) return arr;
+
+            const middle = Math.floor(length / 2);
+            let leftArr = arr.slice(0, middle);
+            let rightArr = arr.slice(middle, length);
+
+            // 核心逻辑就下面这一行：1.要排序的数组拆分成两个，分别递归调用mergeSort进行排序  2. 将排序好的两个数组合并为一个有序数组
+            return mergeArr(mergeSort(leftArr), mergeSort(rightArr));
+        }
+
+        // 将两个有序数组合并为一个有序数组
+        const mergeArr = (leftArr, rightArr) => {
+            let result = [];
+            let leftPointer = 0;
+            let rightPointer = 0;
+            // 两个指针遍历两个数组，两个指针指向的元素谁小谁放进result中
+            while(leftPointer < leftArr.length && rightPointer < rightArr.length) {
+                if(leftArr[leftPointer] <= rightArr[rightPointer]) {
+                    result.push(leftArr[leftPointer]);
+                    leftPointer ++;
+                } else {
+                    result.push(rightArr[rightPointer]);
+                    rightPointer ++;
+                }
+            }
+
+            // 把上面没遍历完的那个数组剩下的部分直接与result数组合并
+            if(leftPointer < leftArr.length) {
+                result = result.concat(leftArr.slice(leftPointer, leftArr.length));
+            } else {
+                result = result.concat(rightArr.slice(rightPointer, rightArr.length));
+            }
+
+            return result;
+        }
+
+        const arr = [8, 7, 6, 5, 4, 3, 2, 1];
+        console.log(mergeSort(arr));
+    </script>
+</body>
+</html>
