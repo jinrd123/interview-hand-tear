@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /*
+        堆排序重点把握思想，就是把数组变成一个堆，这里注意heapify函数的目的是接收一个数组，然后使其变为堆，但是我们下面的堆排序是基于同一个数组空间的排序，所以为了切割数组，heapify函数的第二个和第三个参数可以理解为对数组的截断，即arr.slice(a, b)
+        然后整个数组是一个堆之后，比如为大根堆，那么每次都把数组第一个元素（最大的元素）放到数组最后（与最后一个元素交换位置），然后利用heapify函数把除去最后一个元素的部分重新复原为一个堆，这样循环n次，就完成了堆排序
+    */
+      const heapSort = (arr) => {
+        // 建立大根堆 ——> 数组从小到大排序
+        for (let i = Math.floor((arr.length - 1) / 2) - 1; i >= 0; i--) {
+          heapify(arr, i, 0);
+        }
+
+        // 堆排序
+        // 进行数组长度次循环:
+        //  1. 最大的(数组第一项)与数组最后一项交换位置 ——> 最后一项变为有序
+        //  2. 排除数组最后一项，并维护大根堆的性质
+        //  3. 重复1.
+        for (let i = 0; i < arr.length; i++) {
+          [arr[arr.length - 1 - i], arr[0]] = [arr[0], arr[arr.length - 1 - i]];
+          heapify(arr, 0, i + 1);
+        }
+      };
+
+      // arr堆中以heapRootIndex为根结点的二叉树变为堆（大根堆），orderedNum表示现在已经有序的元素个数（尾部元素），说白了就是截断数组为headRootIndex 到 orderedNum
+      const heapify = (arr, heapRootIndex, orderedNum) => {
+        let leftChildIndex = 2 * heapRootIndex + 1;
+        let rightChildIndex = 2 * heapRootIndex + 2;
+        let maxIndex = heapRootIndex;
+        if (
+          leftChildIndex < arr.length - orderedNum &&
+          arr[leftChildIndex] > arr[maxIndex]
+        ) {
+          maxIndex = leftChildIndex;
+        }
+        if (
+          rightChildIndex < arr.length - orderedNum &&
+          arr[rightChildIndex] > arr[maxIndex]
+        ) {
+          maxIndex = rightChildIndex;
+        }
+        if (maxIndex !== heapRootIndex) {
+          [arr[maxIndex], arr[heapRootIndex]] = [
+            arr[heapRootIndex],
+            arr[maxIndex],
+          ];
+          heapify(arr, maxIndex, orderedNum);
+        }
+      };
+      const arr = [7, 8, 6, 5, 4, 3, 2, 1];
+      heapSort(arr);
+      console.log(arr);
+    </script>
+  </body>
+</html>
